@@ -13,6 +13,11 @@ export function useEvent() {
       if (event.directory === "global") {
         handler(event.payload)
       }
+      // Plugin events are emitted outside any workspace scope
+      if (event.payload.type.startsWith("plugin.")) {
+        handler(event.payload)
+        return
+      }
 
       if (project.workspace.current()) {
         if (event.workspace === project.workspace.current()) {
